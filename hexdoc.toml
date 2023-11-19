@@ -1,0 +1,44 @@
+modid = "minecraft"
+book = "hexcasting:thehexbook"
+default_lang = "en_us"
+
+resource_dirs = [  # top takes priority
+    "resources",
+    "{_common.src}/main/resources",
+    "{_common.src}/generated/resources",
+    
+    { modid="hexcasting" },
+    { modid="minecraft" },
+    { modid="hexdoc" },
+]
+export_dir = "src/hexdoc_minecraft/_export/generated"
+
+[extra.hexcasting]
+# regexes for parsing pattern registry files - try running copier update and picking a different regex if your patterns aren't loading
+# NOTE: "!Raw" means "don't apply variable interpolation to this value"
+_pattern_regex = { "!Raw"='make\(\s*"(?P<name>[a-zA-Z0-9_\/]+)",\s*(?:new )?(?:ActionRegistryEntry|OperationAction)\(\s*HexPattern\.fromAngles\(\s*"(?P<signature>[aqweds]+)",\s*HexDir.(?P<startdir>\w+)\)' }
+
+[[extra.hexcasting.pattern_stubs]]
+path = "{^^^_common.package}/registry/MinecraftPatternRegistry.java"
+regex = "{^_pattern_regex}"
+
+[template]
+icon = "icon.png"
+include = [
+    "minecraft",
+    "hexcasting",
+    "hexdoc",
+]
+
+[template.args]
+mod_name = "Minecraft"
+author = "object-Object"
+show_landing_text = false
+
+# platforms
+
+[_common]
+src = "../src"
+package = "{src}/main/java/com/example/minecraft"
+
+
