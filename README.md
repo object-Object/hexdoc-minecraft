@@ -40,16 +40,9 @@ Useful commands:
 # show help
 hexdoc -h
 
-# render and serve the web book in watch mode
-nodemon
-
-# render and serve the web book
-hexdoc serve
-
-# export, render, and merge the web book
-hexdoc export
-hexdoc render
-hexdoc merge
+hexdoc-minecraft fetch 1.20.2
+hexdoc-minecraft unzip 1.20.2
+hexdoc-minecraft export 1.20.2
 
 # start the Python interpreter with some extra local variables
 hexdoc repl

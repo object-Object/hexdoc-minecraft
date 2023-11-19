@@ -1,5 +1,8 @@
 [build-system]
-requires = ["hatchling", "hatch-gradle-version>=0.8.0"]
+requires = [
+    "hatchling",
+    "hatch-gradle-version>=0.8.0",
+]
 build-backend = "hatchling.build"
 
 # project metadata
@@ -17,7 +20,7 @@ dynamic = ["version", "dependencies", "optional-dependencies"]
 
 [project.urls]
 Homepage = "https://object-object.github.io/hexdoc-minecraft"
-Source = "https://github.com/object-Object/hexdoc-minecraft/tree/main/doc"
+Source = "https://github.com/object-Object/hexdoc-minecraft"
 
 # Gradle version/deps
 
@@ -29,7 +32,8 @@ key = "minecraftVersion"
 
 [tool.hatch.metadata.hooks.gradle-properties]
 dependencies = [
-    "hexdoc~=1!0.1.0.dev"
+    "hexdoc~=1!0.1.dev",
+    "pygithub~=2.1",
 ]
 
 [tool.hatch.metadata.hooks.gradle-properties.optional-dependencies]
@@ -52,7 +56,10 @@ artifacts = [
 [tool.hatch.build.targets.wheel]
 sources = ["src"]
 
-# hexdoc entry points
+# entry points
+
+[project.scripts]
+hexdoc-minecraft = "hexdoc_minecraft.cli.app:app"
 
 [project.entry-points.hexdoc]
 minecraft = "hexdoc_minecraft._hooks:MinecraftPlugin"
