@@ -1,6 +1,7 @@
 from functools import cached_property
 from typing import Iterable, Mapping
 
+import more_itertools
 from hexdoc.core import ResourceLocation
 from hexdoc.minecraft.assets import (
     HexdocAssetLoader,
@@ -30,6 +31,8 @@ class MinecraftAssetLoader(HexdocAssetLoader):
         }
 
     def find_image_textures(self) -> Iterable[tuple[ResourceLocation, ImageTexture]]:
+        # export all textures, but only yield what's in minecraft_assets
+        more_itertools.consume(super().find_image_textures())
         yield from self.repo.scrape_image_textures()
 
     def load_item_models(self) -> Iterable[tuple[ResourceLocation, ModelItem]]:

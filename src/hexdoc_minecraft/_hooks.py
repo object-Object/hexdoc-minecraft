@@ -8,6 +8,9 @@ from hexdoc.plugin import (
     hookimpl,
 )
 
+from .__gradle_version__ import FULL_VERSION, GRADLE_VERSION
+from .__version__ import PY_VERSION
+
 
 class MinecraftPlugin(ModPluginImpl):
     @staticmethod
@@ -23,17 +26,17 @@ class MinecraftModPlugin(VersionedModPlugin):
 
     @property
     def full_version(self) -> str:
-        return "1.20.1.1.0.dev0"  # TODO: replace
+        return FULL_VERSION
 
     @property
     def plugin_version(self) -> str:
-        return "1.0.dev0"  # TODO: replace
+        return PY_VERSION
 
     @property
     def mod_version(self) -> str:
-        return "1.20.1"  # TODO: replace
+        return GRADLE_VERSION
 
     def resource_dirs(self) -> HookReturn[Package]:
-        from hexdoc_minecraft._export import generated
+        from hexdoc_minecraft._export import generated, resources
 
-        return generated
+        return [generated, resources]
