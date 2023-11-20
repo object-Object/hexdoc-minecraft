@@ -123,18 +123,9 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    env:
-      HEXDOC_RELEASE: ${{ needs.build.outputs.release }}
 
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-          cache: pip
-
-      - name: Install Python packages
-        run: pip install .
 
       - name: Download temporary Pages artifact
         uses: actions/download-artifact@v3
