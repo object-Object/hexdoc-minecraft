@@ -1,11 +1,16 @@
 modid = "minecraft"
 default_lang = "en_us"
+default_branch = "main"
 
+_export_root = "src/hexdoc_minecraft/_export"
 resource_dirs = [  # top takes priority
-    ".hexdoc_minecraft/1.20.2/resources",
+    # this won't exist until after the first time we run the app
+    # so without required=false, Properties fails to validate because the path doesn't exist
+    { path=".hexdoc_minecraft/1.20.2/resources", required=false },
+    { path="{^_export_root}/resources", reexport=false },
     { modid="hexdoc" },
 ]
-export_dir = "src/hexdoc_minecraft/_export/generated"
+export_dir = "{_export_root}/generated"
 
 [textures]
 missing = [

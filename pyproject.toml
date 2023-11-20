@@ -32,14 +32,17 @@ key = "minecraftVersion"
 
 [tool.hatch.metadata.hooks.gradle-properties]
 dependencies = [
-    "hexdoc~=1!0.1.dev",
-    "pygithub~=2.1",
+    # "hexdoc~=1!0.1.dev",
+    "hexdoc @ git+https://github.com/object-Object/hexdoc.git@textures", # TODO: remove
 ]
 
 [tool.hatch.metadata.hooks.gradle-properties.optional-dependencies]
 dev = [
     "ruff~=0.1.4",
 ]
+
+[tool.hatch.metadata]
+allow-direct-references = true # TODO: remove
 
 # directory inclusion
 

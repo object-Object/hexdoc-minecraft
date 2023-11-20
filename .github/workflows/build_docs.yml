@@ -44,20 +44,13 @@ concurrency:
 
 jobs:
   hexdoc:
-    uses: object-Object/hexdoc/.github/workflows/hexdoc.yml@v0
+    uses: object-Object/hexdoc/.github/workflows/hexdoc.yml@textures
     permissions:
       contents: write
       pages: read
     with:
       python-version: "3.11"
-      checkout: ${{ github.event_name == 'workflow_dispatch' && inputs.branch != '(same as workflow)' }}
-      branch: ${{ inputs.branch }}
-      publish-latest-and-root: |-
-        ${{
-          github.event_name != 'workflow_dispatch'
-          || inputs.update-latest
-        }}
-      publish-release: |-
+      release: |-
         ${{
           github.event_name == 'workflow_dispatch' && inputs.release
           || startsWith(github.event.head_commit.message, '[Release]')
@@ -69,7 +62,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [hexdoc]
     if: |-
-      needs.hexdoc.outputs.publish-release == 'true' &&
+      needs.hexdoc.outputs.release == 'true' &&
       (github.event_name != 'workflow_dispatch' || inputs.publish == 'PyPI (release)')
 
     environment:
