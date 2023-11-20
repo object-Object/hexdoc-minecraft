@@ -24,6 +24,7 @@ on:
 
 env:
   PYPI_PACKAGE: hexdoc-minecraft
+  PYTHON_VERSION: '3.11'
 
 permissions:
   contents: read
@@ -34,28 +35,121 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  hexdoc:
-    uses: object-Object/hexdoc/.github/workflows/hexdoc.yml@textures
+  build:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     permissions:
       contents: write
       pages: read
-    secrets:
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    with:
-      python-version: "3.11"
-      release: |-
-        ${{
-          github.event_name == 'workflow_dispatch' && inputs.release
-          || startsWith(github.event.head_commit.message, '[Release]')
-          || startsWith(github.ref, 'refs/tags')
-        }}
-      bump-version-segment: ${{ inputs.segment }}
+    outputs:
+      pages-url: ${{ steps.export.outputs.pages-url }}
+      matrix:    ${{ steps.export.outputs.matrix }}
+      release:   ${{ steps.release.outputs.release }}
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+
+      - name: Install display server
+        uses: awalsh128/cache-apt-pkgs-action@v1
+        with:
+          packages: xvfb
+
+      - name: Install Python packages
+        run: pip install -e . hatch
+
+      - name: Bump version
+        if: inputs.segment
+        run: hatch version "${{ inputs.segment }}"
+
+      - name: Commit changes
+        if: inputs.segment
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Bump version from ${{ github.ref }}
+
+      - name: Check for release
+        id: release
+        run: |-
+          echo "release=${{
+            github.event_name == 'workflow_dispatch' && inputs.release
+            || startsWith(github.event.head_commit.message, '[Release]')
+            || startsWith(github.ref, 'refs/tags')
+          }}" >> "$GITHUB_OUTPUT"
+
+      - name: Fetch Minecraft client jar
+        run: hexdoc-minecraft fetch
+
+      - name: Extract Minecraft assets
+        run: hexdoc-minecraft unzip
+
+      - name: Export common data
+        id: export
+        env:
+          HEXDOC_RELEASE: ${{ steps.release.outputs.release }}
+        run: xvfb-run --auto-servernum hexdoc ci export
+
+      - name: Upload hexdoc cache artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: hexdoc-cache
+          path: .hexdoc
+
+      - name: Upload temporary Pages artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: github-pages-tmp
+          path: _site
+
+      - name: Upload package artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: hexdoc-build
+          path: dist
+
+      - name: Add job summary
+        run: echo "Built version \`$(hatch version)\` from commit \`$(git rev-parse --short "$GITHUB_SHA")\`." >> $GITHUB_STEP_SUMMARY
+
+  deploy-pages:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      HEXDOC_RELEASE: ${{ needs.build.outputs.release }}
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+
+      - name: Install Python packages
+        run: pip install .
+
+      - name: Download temporary Pages artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: github-pages-tmp
+          path: _site
+
+      - name: Deploy to Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: _site
+          target-folder: docs
+          clean: false
 
   publish-pypi:
     runs-on: ubuntu-latest
-    needs: [hexdoc]
+    needs: [build, deploy-pages]
     if: |-
-      needs.hexdoc.outputs.release == 'true' &&
+      needs.build.outputs.release == 'true' &&
       (github.event_name != 'workflow_dispatch' || inputs.publish == 'PyPI (release)')
 
     environment:
