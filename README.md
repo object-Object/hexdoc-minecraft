@@ -40,9 +40,9 @@ Useful commands:
 # show help
 hexdoc -h
 
-hexdoc-minecraft fetch 1.20.2
-hexdoc-minecraft unzip 1.20.2
-hexdoc-minecraft export 1.20.2
+hexdoc-minecraft fetch
+hexdoc-minecraft unzip
+hexdoc export
 
 # start the Python interpreter with some extra local variables
 hexdoc repl
