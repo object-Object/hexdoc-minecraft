@@ -37,6 +37,7 @@ env:
 
 permissions:
   contents: read
+  pages: read
 
 concurrency:
   group: hexdoc
