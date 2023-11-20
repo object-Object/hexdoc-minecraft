@@ -7,26 +7,16 @@ on:
     tags: "*"
   workflow_dispatch:
     inputs:
-      branch:
-        description: 'Branch to generate docs from'
-        type: choice
-        options:
-          - (same as workflow)
       release:
         description: Release this version
         type: boolean
         default: false
-      update-latest:
-        description: Overwrite latest (and root, if releasing)
-        type: boolean
-        default: true
       publish:
         description: Package index to publish to
         type: choice
         options:
           - none
           - PyPI (release)
-          - TestPyPI
       segment:
         description: 'Version segment to bump with Hatch'
         type: string
