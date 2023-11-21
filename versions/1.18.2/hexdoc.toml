@@ -2,11 +2,9 @@ modid = "minecraft"
 default_lang = "en_us"
 default_branch = "main"
 
-_export_root = "src/hexdoc_minecraft/_export"
-resource_dirs = [  # top takes priority
-    # this won't exist until after the first time we run the app
-    # so without required=false, Properties fails to validate because the path doesn't exist
-    { path=".hexdoc_minecraft/1.20.2/resources", required=false },
+_export_root = "../../src/hexdoc_minecraft/_export"
+resource_dirs = [
+    { path="../../.hexdoc_minecraft/1.18.1/resources", required=false },
     { path="{^_export_root}/resources", reexport=false },
     { modid="hexdoc" },
 ]
@@ -23,6 +21,5 @@ missing = [
 ]
 
 [extra.minecraft]
-# https://github.com/PrismarineJS/minecraft-assets/tree/a14c64362abe4a12c2dfd87f8d1673af9d1b09f4/data/1.20.2
 ref = "a14c64362abe4a12c2dfd87f8d1673af9d1b09f4"
-version = "1.20.2"
+version = "1.18.1"

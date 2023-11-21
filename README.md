@@ -22,7 +22,8 @@ python3.11 -m venv venv
 . venv/bin/activate.fish  # fish
 source venv/bin/activate  # everything else
 
-# run from the repo root, not doc/
+$env:HATCH_GRADLE_DIR='versions/1.20.2' # Windows
+HATCH_GRADLE_DIR='versions/1.20.2'      # everything else
 pip install -e .[dev]
 ```
 
@@ -40,7 +41,7 @@ Useful commands:
 # show help
 hexdoc -h
 
-hexdoc-minecraft fetch
+hexdoc-minecraft fetch -p versions/1.20.2/hexdoc.toml
 hexdoc-minecraft unzip
 hexdoc export
 

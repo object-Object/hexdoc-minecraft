@@ -1,0 +1,25 @@
+modid = "minecraft"
+default_lang = "en_us"
+default_branch = "main"
+
+_export_root = "../../src/hexdoc_minecraft/_export"
+resource_dirs = [
+    { path="../../.hexdoc_minecraft/1.20.2/resources", required=false },
+    { path="{^_export_root}/resources", reexport=false },
+    { modid="hexdoc" },
+]
+export_dir = "{_export_root}/generated"
+
+[textures]
+missing = [
+    "minecraft:air",
+    "minecraft:amethyst_bud",
+    "minecraft:handheld_rod",
+    "minecraft:handheld",
+    "minecraft:spyglass_in_hand",
+    "minecraft:template_music_disc",
+]
+
+[extra.minecraft]
+ref = "a14c64362abe4a12c2dfd87f8d1673af9d1b09f4"
+version = "1.20.2"

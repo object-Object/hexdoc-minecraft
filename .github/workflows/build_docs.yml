@@ -7,6 +7,14 @@ on:
     tags: "*"
   workflow_dispatch:
     inputs:
+      minecraft-version:
+        description: Minecraft version to export
+        type: choice
+        options:
+          - '1.18.2'
+          - '1.19.2'
+          - '1.20.1'
+          - '1.20.2'
       release:
         description: Release this version
         type: boolean
@@ -19,6 +27,8 @@ on:
           - PyPI (release)
 
 env:
+  HATCH_GRADLE_DIR: versions/${{ inputs.minecraft-version }}
+  HEXDOC_PROPS: versions/${{ inputs.minecraft-version }}/hexdoc.toml
   PYPI_PACKAGE: hexdoc-minecraft
   PYTHON_VERSION: '3.11'
 
