@@ -17,10 +17,6 @@ on:
         options:
           - none
           - PyPI (release)
-      segment:
-        description: 'Version segment to bump with Hatch'
-        type: string
-        required: false
 
 env:
   PYPI_PACKAGE: hexdoc-minecraft
@@ -29,10 +25,6 @@ env:
 permissions:
   contents: read
   pages: read
-
-concurrency:
-  group: hexdoc
-  cancel-in-progress: false
 
 jobs:
   build:
@@ -61,16 +53,6 @@ jobs:
 
       - name: Install Python packages
         run: pip install -e . hatch
-
-      - name: Bump version
-        if: inputs.segment
-        run: hatch version "${{ inputs.segment }}"
-
-      - name: Commit changes
-        if: inputs.segment
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: Bump version from ${{ github.ref }}
 
       - name: Check for release
         id: release
@@ -121,6 +103,9 @@ jobs:
   deploy-pages:
     needs: build
     runs-on: ubuntu-latest
+    concurrency:
+      group: hexdoc-deploy-pages
+      cancel-in-progress: false
     permissions:
       contents: write
 
@@ -146,7 +131,9 @@ jobs:
     if: |-
       needs.build.outputs.release == 'true' &&
       (github.event_name != 'workflow_dispatch' || inputs.publish == 'PyPI (release)')
-
+    concurrency:
+      group: pypi
+      cancel-in-progress: false
     environment:
       name: pypi
       url: https://pypi.org/p/${{ env.PYPI_PACKAGE }}
