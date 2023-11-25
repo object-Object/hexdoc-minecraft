@@ -3,8 +3,8 @@ from pathlib import Path
 from zipfile import ZipFile
 
 from hexdoc.cli.utils.args import PropsOption, VerbosityOption
-from hexdoc.cli.utils.logging import setup_logging
 from hexdoc.core import Properties
+from hexdoc.utils import setup_logging
 from typer import Typer
 
 from ..piston_meta import VersionManifestV2
@@ -28,9 +28,10 @@ def fetch(
     *,
     props_file: PropsOption,
     verbosity: VerbosityOption = 1,
+    ci: bool = False,
 ):
     """Download the Minecraft client jar."""
-    setup_logging(verbosity)
+    setup_logging(verbosity, ci)
 
     props = Properties.load(props_file)
     minecraft_props = MinecraftProps.model_validate(props.extra["minecraft"])
@@ -49,9 +50,10 @@ def unzip(
     *,
     props_file: PropsOption,
     verbosity: VerbosityOption = 1,
+    ci: bool = False,
 ):
     """Partially extract the Minecraft client jar."""
-    setup_logging(verbosity)
+    setup_logging(verbosity, ci)
 
     props = Properties.load(props_file)
     minecraft_props = MinecraftProps.model_validate(props.extra["minecraft"])

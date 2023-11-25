@@ -71,12 +71,12 @@ jobs:
       - name: Fetch Minecraft client jar
         env:
           GITHUB_PAGES_URL: # because otherwise hexdoc complains
-        run: hexdoc-minecraft fetch
+        run: hexdoc-minecraft fetch --ci
 
       - name: Extract Minecraft assets
         env:
           GITHUB_PAGES_URL:
-        run: hexdoc-minecraft unzip
+        run: hexdoc-minecraft unzip --ci
 
       - name: Export common data
         id: export
