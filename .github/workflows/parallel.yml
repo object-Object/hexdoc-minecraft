@@ -28,6 +28,7 @@ jobs:
           - "1.19.2"
           - "1.18.2"
       fail-fast: false
+      max-parallel: 2 # otherwise we run into concurrency issues :(
     uses: ./.github/workflows/build_docs.yml
     with:
       minecraft-version: ${{ matrix.minecraft-version }}
