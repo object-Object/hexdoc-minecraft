@@ -16,6 +16,10 @@ on:
 
 jobs:
   build_docs:
+    permissions:
+      pages: read
+      contents: write
+      id-token: write
     strategy:
       matrix:
         minecraft-version:
