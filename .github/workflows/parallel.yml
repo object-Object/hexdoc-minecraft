@@ -1,0 +1,30 @@
+name: Build and publish all versions in parallel
+
+on:
+  workflow_dispatch:
+    inputs:
+      release:
+        description: Release this version
+        type: boolean
+        default: false
+      publish:
+        description: Package index to publish to
+        type: choice
+        options:
+          - none
+          - PyPI
+
+jobs:
+  build_docs:
+    strategy:
+      matrix:
+        minecraft-version:
+          - "1.20.2"
+          - "1.20.1"
+          - "1.19.2"
+          - "1.18.2"
+    uses: ./.github/workflows/build_docs.yml
+    with:
+      minecraft-version: ${{ matrix.minecraft-version }}
+      release: ${{ inputs.release }}
+      publish: ${{ inputs.publish }}

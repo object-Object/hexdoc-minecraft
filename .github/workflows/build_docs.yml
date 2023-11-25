@@ -21,6 +21,14 @@ on:
         options:
           - none
           - PyPI
+  workflow_call:
+    inputs:
+      minecraft-version:
+        type: string
+      release:
+        type: boolean
+      publish:
+        type: string
 
 env:
   HATCH_GRADLE_DIR: versions/${{ inputs.minecraft-version }}
