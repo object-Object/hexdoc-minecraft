@@ -32,7 +32,7 @@ key = "minecraftVersion"
 
 [tool.hatch.metadata.hooks.gradle-properties]
 dependencies = [
-    "hexdoc~=1!0.1.dev1",
+    "hexdoc~=1!0.1.dev5",
 ]
 
 [tool.hatch.metadata.hooks.gradle-properties.optional-dependencies]
