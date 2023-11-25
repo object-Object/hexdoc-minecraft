@@ -19,8 +19,8 @@ requires-python = ">=3.11"
 dynamic = ["version", "dependencies", "optional-dependencies"]
 
 [project.urls]
-Homepage = "https://object-object.github.io/hexdoc-minecraft"
-Source = "https://github.com/object-Object/hexdoc-minecraft"
+Homepage = "https://hexdoc-dev.github.io/hexdoc-minecraft"
+Source = "https://github.com/hexdoc-dev/hexdoc-minecraft"
 
 # Gradle version/deps
 

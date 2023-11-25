@@ -31,9 +31,9 @@ pip install -e .[dev]
 
 For local testing, create a file called `.env` in the repo root following this template:
 ```sh
-GITHUB_REPOSITORY=object-Object/hexdoc-minecraft
+GITHUB_REPOSITORY=hexdoc-dev/hexdoc-minecraft
 GITHUB_SHA=main
-GITHUB_PAGES_URL=https://object-object.github.io/hexdoc-minecraft
+GITHUB_PAGES_URL=https://hexdoc-dev.github.io/hexdoc-minecraft
 ```
 
 Useful commands:
