@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from functools import cached_property
 from typing import Iterable, Mapping
 
@@ -5,17 +6,17 @@ import more_itertools
 from hexdoc.core import ResourceLocation
 from hexdoc.minecraft.assets import (
     HexdocAssetLoader,
-    HexdocPythonResourceLoader,
     ImageTexture,
     ItemTexture,
-    ModelItem,
     PNGTexture,
 )
 from hexdoc.minecraft.assets.items import SingleItemTexture
+from yarl import URL
 
 from .minecraft_assets import MinecraftAssetsRepo
 
 
+@dataclass(kw_only=True)
 class MinecraftAssetLoader(HexdocAssetLoader):
     repo: MinecraftAssetsRepo
 
@@ -24,7 +25,7 @@ class MinecraftAssetLoader(HexdocAssetLoader):
         texture_content = self.repo.texture_content()
         return {
             value.name: SingleItemTexture(
-                inner=PNGTexture(url=value.texture, pixelated=True)
+                inner=PNGTexture(url=URL(value.texture), pixelated=True)
             )
             for value in texture_content
             if value.texture
@@ -35,7 +36,7 @@ class MinecraftAssetLoader(HexdocAssetLoader):
         more_itertools.consume(super().find_image_textures())
         yield from self.repo.scrape_image_textures()
 
-    def load_item_models(self) -> Iterable[tuple[ResourceLocation, ModelItem]]:
+    def load_item_models(self):
         for item_id, model in super().load_item_models():
             if model.parent and model.parent.path.startswith("builtin"):
                 continue
@@ -43,6 +44,3 @@ class MinecraftAssetLoader(HexdocAssetLoader):
 
     def fallback_texture(self, item_id: ResourceLocation) -> ItemTexture | None:
         return self.fallbacks.get(item_id)
-
-    def renderer_loader(self):
-        return HexdocPythonResourceLoader(loader=self.loader).wrapped()

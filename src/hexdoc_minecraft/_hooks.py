@@ -12,6 +12,7 @@ from hexdoc.plugin import (
     hookimpl,
 )
 from typing_extensions import override
+from yarl import URL
 
 from .__gradle_version__ import FULL_VERSION, GRADLE_VERSION
 from .__version__ import PY_VERSION
@@ -54,15 +55,15 @@ class MinecraftModPlugin(VersionedModPlugin):
         self,
         loader: ModResourceLoader,
         *,
-        site_url: str,
-        asset_url: str,
+        site_url: URL,
+        asset_url: URL,
         render_dir: Path,
     ) -> HexdocAssetLoader:
         minecraft_props = MinecraftProps.model_validate(loader.props.extra["minecraft"])
         return MinecraftAssetLoader(
             loader=loader,
-            site_url=site_url,
-            asset_url=asset_url,
+            site_url=URL(site_url),
+            asset_url=URL(asset_url),
             render_dir=render_dir,
             repo=MinecraftAssetsRepo(
                 github=Github(),

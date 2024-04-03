@@ -9,6 +9,7 @@ from hexdoc.core import ResourceLocation
 from hexdoc.minecraft.assets import PNGTexture
 from hexdoc.model import HexdocModel, HexdocTypeAdapter
 from hexdoc.utils import isinstance_or_raise
+from yarl import URL
 
 from hexdoc_minecraft.piston_meta import fetch_model
 
@@ -73,5 +74,5 @@ class MinecraftAssetsRepo(HexdocModel, arbitrary_types_allowed=True):
                 )
 
                 # TODO: support AnimatedTexture?
-                logger.info(f"Scraped texture {texture_id}: {url}")
-                yield texture_id, PNGTexture(url=url, pixelated=True)
+                logger.debug(f"Scraped texture {texture_id}: {url}")
+                yield texture_id, PNGTexture(url=URL(url), pixelated=True)

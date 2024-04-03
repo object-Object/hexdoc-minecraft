@@ -42,9 +42,9 @@ Useful commands:
 hexdoc -h
 
 hexdoc-minecraft fetch -p versions/1.20.2/hexdoc.toml
-hexdoc-minecraft unzip
-hexdoc export
+hexdoc-minecraft unzip -p versions/1.20.2/hexdoc.toml
+hexdoc render -p versions/1.20.2/hexdoc.toml
 
 # start the Python interpreter with some extra local variables
-hexdoc repl
+hexdoc repl -p versions/1.20.2/hexdoc.toml
 ```
