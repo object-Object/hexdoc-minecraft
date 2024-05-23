@@ -67,8 +67,8 @@ def unzip(
                 (
                     "assets/minecraft/blockstates/",
                     "assets/minecraft/models/",
-                    "assets/minecraft/textures/block/",
-                    "assets/minecraft/textures/item/",
+                    "assets/minecraft/textures/",
+                    "assets/minecraft/textures/",
                 )
             ):
                 jar.extract(name, version_dir / "resources")
