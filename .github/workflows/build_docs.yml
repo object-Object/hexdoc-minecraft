@@ -78,6 +78,11 @@ jobs:
           GITHUB_PAGES_URL:
         run: hexdoc-minecraft unzip --ci
 
+      - name: Scrape block entities from the Minecraft Wiki
+        env:
+          GITHUB_PAGES_URL:
+        run: hexdoc-minecraft entity-models --ci
+
       - name: Export common data
         id: export
         run: xvfb-run --auto-servernum hexdoc ci export

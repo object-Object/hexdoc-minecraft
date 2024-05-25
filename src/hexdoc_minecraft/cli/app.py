@@ -2,8 +2,11 @@ import logging
 from pathlib import Path
 from zipfile import ZipFile
 
+import requests
+from hexdoc.cli.utils import load_common_data
 from hexdoc.cli.utils.args import PropsOption, VerbosityOption
-from hexdoc.core import Properties
+from hexdoc.core import ModResourceLoader, Properties
+from hexdoc.graphics.model import BlockModel, BuiltInModelType
 from hexdoc.utils import setup_logging
 from typer import Typer
 
@@ -21,6 +24,41 @@ app = Typer(
         "help_option_names": ["--help", "-h"],
     },
 )
+
+
+@app.command()
+def entity_models(
+    *,
+    props_file: PropsOption,
+    verbosity: VerbosityOption = 0,
+    ci: bool = False,
+):
+    """Download the Minecraft client jar."""
+    setup_logging(verbosity, ci)
+
+    props, pm, *_ = load_common_data(props_file, branch="")
+
+    with ModResourceLoader.load_all(props, pm, export=True) as loader:
+        for _, item_id, _ in loader.find_resources(
+            "assets",
+            namespace="*",
+            folder="models/item",
+            internal_only=True,
+        ):
+            model_id = "item" / item_id
+            _, model = BlockModel.load_and_resolve(loader, model_id)
+            if model.builtin_parent != BuiltInModelType.ENTITY:
+                continue
+
+            url_path = "_".join(s.capitalize() for s in item_id.path.split("_"))
+            url = f"https://minecraft.wiki/images/Invicon_{url_path}.png"
+            result = requests.get(url)
+            if not result.ok:
+                continue
+
+            export_path = (model_id + ".png").file_path_stub("assets", "hexdoc/renders")
+            print(f"{item_id}\n-> {export_path}")
+            loader.export(export_path, result.content)
 
 
 @app.command()
