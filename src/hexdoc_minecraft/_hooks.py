@@ -1,9 +1,5 @@
 from importlib.resources import Package
-from pathlib import Path
 
-from github import Github
-from hexdoc.core import ModResourceLoader
-from hexdoc.minecraft.assets import HexdocAssetLoader
 from hexdoc.plugin import (
     HookReturn,
     ModPlugin,
@@ -11,14 +7,9 @@ from hexdoc.plugin import (
     VersionedModPlugin,
     hookimpl,
 )
-from typing_extensions import override
-from yarl import URL
 
 from .__gradle_version__ import FULL_VERSION, GRADLE_VERSION
 from .__version__ import PY_VERSION
-from .asset_loader import MinecraftAssetLoader
-from .minecraft_assets import MinecraftAssetsRepo
-from .properties import MinecraftProps
 
 
 class MinecraftPlugin(ModPluginImpl):
@@ -49,25 +40,3 @@ class MinecraftModPlugin(VersionedModPlugin):
         from hexdoc_minecraft._export import generated, resources
 
         return [generated, resources]
-
-    @override
-    def asset_loader(
-        self,
-        loader: ModResourceLoader,
-        *,
-        site_url: URL,
-        asset_url: URL,
-        render_dir: Path,
-    ) -> HexdocAssetLoader:
-        minecraft_props = MinecraftProps.model_validate(loader.props.extra["minecraft"])
-        return MinecraftAssetLoader(
-            loader=loader,
-            site_url=URL(site_url),
-            asset_url=URL(asset_url),
-            render_dir=render_dir,
-            repo=MinecraftAssetsRepo(
-                github=Github(),
-                ref=minecraft_props.ref,
-                version=minecraft_props.version,
-            ),
-        )
