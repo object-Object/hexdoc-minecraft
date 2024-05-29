@@ -3,7 +3,6 @@ import os
 import nox
 
 nox.options.default_venv_backend = "uv|virtualenv"
-nox.options.reuse_existing_virtualenvs = True
 nox.options.sessions = []
 
 
@@ -22,7 +21,10 @@ def build(session: nox.Session):
     hexdoc_minecraft(session, "fetch")
     hexdoc_minecraft(session, "unzip")
     hexdoc_minecraft(session, "entity-models")
-    hexdoc(session, "export")
+    hexdoc(session, "build", "--no-clean-exports")
+
+    if not IS_CI:
+        session.run("hatch", "build")
 
 
 def hexdoc(session: nox.Session, *args: str):
