@@ -55,37 +55,19 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: object-Object/ci/setup@v0
         with:
-          python-version: ${{ env.PYTHON_VERSION }}
-          cache: pip
+          python-version: "3.11"
+          python-packages: nox
 
       - name: Install display server
         uses: awalsh128/cache-apt-pkgs-action@v1
         with:
           packages: xvfb
 
-      - name: Install Python packages
-        run: pip install -e . hatch
-
-      - name: Fetch Minecraft client jar
-        env:
-          GITHUB_PAGES_URL: # because otherwise hexdoc complains
-        run: hexdoc-minecraft fetch --ci
-
-      - name: Extract Minecraft assets
-        env:
-          GITHUB_PAGES_URL:
-        run: hexdoc-minecraft unzip --ci
-
-      - name: Scrape block entities from the Minecraft Wiki
-        env:
-          GITHUB_PAGES_URL:
-        run: hexdoc-minecraft entity-models --ci
-
-      - name: Export common data
+      - name: Build package
         id: export
-        run: xvfb-run --auto-servernum hexdoc ci export
+        run: xvfb-run --auto-servernum nox --session build
 
       - name: Upload hexdoc cache artifact
         uses: actions/upload-artifact@v3

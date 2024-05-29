@@ -38,6 +38,7 @@ dependencies = [
 [tool.hatch.metadata.hooks.gradle-properties.optional-dependencies]
 dev = [
     "ruff~=0.1.4",
+    "nox",
 ]
 
 # directory inclusion
