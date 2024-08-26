@@ -23,10 +23,10 @@ jobs:
     strategy:
       matrix:
         minecraft-version:
-          - "1.20.2"
-          - "1.20.1"
-          - "1.19.2"
-          - "1.18.2"
+          - '1.18.2'
+          - '1.19.2'
+          - '1.20.1'
+          - '1.20.2'
       fail-fast: false
       max-parallel: 2 # otherwise we run into concurrency issues :(
     uses: ./.github/workflows/build_docs.yml
