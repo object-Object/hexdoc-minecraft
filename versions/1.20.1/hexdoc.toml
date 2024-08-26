@@ -4,8 +4,8 @@ default_branch = "main"
 
 _export_root = "../../src/hexdoc_minecraft/_export"
 resource_dirs = [
-    { path="../../.hexdoc_minecraft/1.20.2/resources", required=false },
-    { path="{^_export_root}/resources", reexport=false },
+    { path="../../.hexdoc_minecraft/{$extra.minecraft.version}/resources", required=false },
+    { path="{$_export_root}/resources", reexport=false },
     { modid="hexdoc" },
 ]
 export_dir = "{_export_root}/generated"
@@ -21,5 +21,4 @@ missing = [
 ]
 
 [extra.minecraft]
-ref = "a14c64362abe4a12c2dfd87f8d1673af9d1b09f4"
-version = "1.20.2"
+version = "1.20.1"
