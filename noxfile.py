@@ -13,8 +13,9 @@ IS_CI = bool(os.getenv("CI"))
 def build(session: nox.Session):
     session.env["GITHUB_PAGES_URL"] = ""
     if not IS_CI:
-        session.env.setdefault("HATCH_GRADLE_DIR", "versions/1.20.1")
-        session.env.setdefault("HEXDOC_PROPS", "versions/1.20.1/hexdoc.toml")
+        version = session.posargs[0] if session.posargs else "1.20.1"
+        session.env.setdefault("HATCH_GRADLE_DIR", f"versions/{version}")
+        session.env.setdefault("HEXDOC_PROPS", f"versions/{version}/hexdoc.toml")
 
     session.install("-e", ".", "hatch", "--find-links", "./libs")
 
