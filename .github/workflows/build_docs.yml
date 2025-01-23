@@ -55,7 +55,7 @@ jobs:
       matrix:    ${{ steps.export.outputs.matrix }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: object-Object/ci/setup@v0
         with:
           python-version: "3.11"
@@ -71,19 +71,19 @@ jobs:
         run: xvfb-run --auto-servernum nox --session build
 
       - name: Upload hexdoc cache artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: hexdoc-cache
           path: .hexdoc
 
       - name: Upload temporary Pages artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: github-pages-tmp
           path: _site
 
       - name: Upload package artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: hexdoc-build
           path: dist
@@ -101,10 +101,10 @@ jobs:
       contents: write
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Download temporary Pages artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: github-pages-tmp
           path: _site
@@ -128,7 +128,7 @@ jobs:
 
     steps:
       - name: Download package artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: hexdoc-build
           path: dist
